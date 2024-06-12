@@ -1,12 +1,14 @@
 import { Container } from "react-bootstrap"
-import Header from "./components/Header"
+// import Header from "./components/Header"
+import Navbar from "./components/Navbar"
 
 function App() {
 
   return (
     <>
-    <Header />
+    {/* <Header /> */}
     <Container>
+      <Navbar />
     </Container>
     </>
   )
