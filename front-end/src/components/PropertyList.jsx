@@ -1,6 +1,6 @@
 import React from "react";
 import PropertyCard from "./PropertyCard";
-import {Col, Row} from 'react-bootstrapgit '
+import { Col, Row } from 'react-bootstrap';
 
 
 function PropertyList() {
