@@ -9,7 +9,7 @@ import Image from "react-bootstrap/Image";
 
 function NavBar() {
   return (
-    <Navbar expand="xl" className="bg-body-tertiary sticky-top">
+    <Navbar className="bg-body-tertiary sticky-top">
       <Container fluid>
         <Navbar.Brand href="#">
           <Col xs="auto" className="ms-4">

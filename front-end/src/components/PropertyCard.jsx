@@ -1,10 +1,11 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
+
 function PropertyCard() {
   return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="https://images.pexels.com/photos/1571470/pexels-photo-1571470.jpeg?auto=compress&cs=tinysrgb&w=600"/>
+    <Card style={{ width: '14rem', height: "400"}}>
+      <Card.Img variant="top" src="https://images.pexels.com/photos/1571470/pexels-photo-1571470.jpeg?auto=compress&cs=tinysrgb&w=600"  />
       <Card.Body>
         <Card.Title>Card Title</Card.Title>
         <Card.Text>
