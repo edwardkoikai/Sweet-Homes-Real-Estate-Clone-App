@@ -31,9 +31,9 @@ function NavBar() {
             variant="tabs"
             defaultActiveKey="/home"
           >
-            <Nav.Link to = "/" style={{ marginRight: '2rem' }}>Home</Nav.Link>
-            <Nav.Link t0 = "/add-property" style={{ marginRight: '2rem' }}>Add Property</Nav.Link>
-            <Nav.Link to = "reservations">View Reservation</Nav.Link>
+            <Nav.Link as={NavLink} to="/" style={{ marginRight: '2rem' }}>Home</Nav.Link>
+            <Nav.Link as={NavLink} to="/add-property" style={{ marginRight: '2rem' }}>Add Property</Nav.Link>
+            <Nav.Link as={NavLink} to="/reservations">View Reservation</Nav.Link>
           </Nav>
           <Form className="d-flex">
             <Form.Control
