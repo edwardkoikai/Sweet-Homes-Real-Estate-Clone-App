@@ -8,14 +8,22 @@ class Housing_unit_type:
         self.name = name
         
     def save(self):
-        sql = f"""
-        INSERT INTO (self.TABLE_NAME) (name)
-        VALUES  (?)
-        """
-        cursor.execute(sql,(self.name,))
-        cursor.commit()
-        self.id =cursor.lastrowid
-        print(f"{self.name} Housing Type saved successfully")
+        # Check if the record already exists
+        cursor.execute(f"SELECT id FROM {self.TABLE_NAME} WHERE name = ?", (self.name,))
+        row = cursor.fetchone()
+
+        if row:
+            self.id = row[0]
+            print(f"{self.name} already exists with id {self.id}")
+        else:
+            sql = f"""
+                INSERT INTO {self.TABLE_NAME} (name)
+                VALUES (?)
+            """
+            cursor.execute(sql, (self.name,))
+            conn.commit()
+            self.id = cursor.lastrowid
+            print(f"{self.name} saved with id {self.id}")
         
     @classmethod
     def create_table(cls):
