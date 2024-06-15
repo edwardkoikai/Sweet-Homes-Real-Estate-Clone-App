@@ -4,6 +4,8 @@ import Form from 'react-bootstrap/Form';
 import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react';
+import { BASE_URL } from './utilis';
 
 const schema = z.object({
   name: z.string({
@@ -27,6 +29,22 @@ const schema = z.object({
 })
 
 function AddProperty() {
+  const [housing_unit_types, setTypes] = useState([])
+
+  useEffect(()=>{
+    fetch(`${BASE_URL}/housing_unit_types`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+
+    })
+    .then((res)=> res.json())
+    .then((data)=>{
+      console.log(data)
+    }).catch((err)=>console.log(err));
+  }, []);
+
   const { handleSubmit, control, formState } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
