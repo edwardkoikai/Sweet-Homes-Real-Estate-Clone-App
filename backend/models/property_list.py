@@ -24,7 +24,38 @@ class Housing_unit_type:
             conn.commit()
             self.id = cursor.lastrowid
             print(f"{self.name} saved with id {self.id}")
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
+    
+    @classmethod
+    def find_all(cls):
+        sql = f"""
+            SELECT * FROM {cls.TABLE_NAME}
+        """
         
+        rows = cursor.execute(sql).fetchall()
+        
+        return [
+            cls.row_to_instance(row).to_dict() for row in rows
+            
+        ]
+    
+    
+    @classmethod
+    def row_to_instance(cls, row):
+        if row == None:
+            return None
+        
+        housing_unit_type = cls(row[1])
+        housing_unit_type.id = row[0]
+        
+        return housing_unit_type
+            
+    
     @classmethod
     def create_table(cls):
         sql = f"""

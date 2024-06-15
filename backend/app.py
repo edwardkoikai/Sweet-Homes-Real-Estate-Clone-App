@@ -12,6 +12,13 @@ class PropertyModel(BaseModel):
 def read_root():
     return {"Hello": "World"}
 
+
+@app.get("/housing_unit_types")
+def housing_unit_types():
+    housing_unit_types = Housing_unit_type.find_all()
+    
+    return housing_unit_types
+
 @app.get("/property_list")
 def get_property_list():
     return [{"name": "Runda"}]
