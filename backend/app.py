@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from models.property_list import Housing_unit_type
 
 app = FastAPI()
 
