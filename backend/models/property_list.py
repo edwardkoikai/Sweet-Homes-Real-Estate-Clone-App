@@ -1,11 +1,19 @@
-from db import cursor, conn
+from db import conn, cursor
 
-class Housing_unit_type:
+
+class Property_list():
+    TABLE_NAME = "property_list"
     
-    TABLE_NAME = "housing_unit_type"
-    def __init__(self, name):
-        self.id= None
+    def __init__(self, name, location, rent, image,  description, housing_unit_type_id):
+        self.id = None
         self.name = name
+        self.location = location
+        self.rent = rent
+        self.image = image
+        self.description = description
+        self.housing_unit_type_id = housing_unit_type_id
+        self.created_at = None
+        self.housing_unit_type = None
         
     def save(self):
         # Check if the record already exists
@@ -17,62 +25,44 @@ class Housing_unit_type:
             print(f"{self.name} already exists with id {self.id}")
         else:
             sql = f"""
-                INSERT INTO {self.TABLE_NAME} (name)
-                VALUES (?)
+                INSERT INTO {self.TABLE_NAME} (name, location, rent, image, housing_unit_type_id, description)
+                VALUES (?, ?, ?, ?, ?, ?)
             """
-            cursor.execute(sql, (self.name,))
+            cursor.execute(sql, (self.name, self.location, self.rent, self.image, self.housing_unit_type_id, self.description))
             conn.commit()
             self.id = cursor.lastrowid
             print(f"{self.name} saved with id {self.id}")
-    
+            
+            return self
+            
     def to_dict(self):
         return {
             "id": self.id,
-            "name": self.name
+            "name": self.name,
+            "location": self.location,
+            "rent": self.rent,
+            "image": self.image,
+            "housing_unit_type": self.housing_unit_type,
+            "description": self.description,
+            "created_at": self.created_at
         }
-    
-    @classmethod
-    def find_all(cls):
-        sql = f"""
-            SELECT * FROM {cls.TABLE_NAME}
-        """
         
-        rows = cursor.execute(sql).fetchall()
-        
-        return [
-            cls.row_to_instance(row).to_dict() for row in rows
-            
-        ]
-    
-    
-    @classmethod
-    def row_to_instance(cls, row):
-        if row == None:
-            return None
-        
-        housing_unit_type = cls(row[1])
-        housing_unit_type.id = row[0]
-        
-        return housing_unit_type
-            
-    
     @classmethod
     def create_table(cls):
-        sql = f"""
-            CREATE TABLE IF NOT EXISTS  {cls.TABLE_NAME} (
+        sql = f""" 
+            CREATE TABLE IF NOT EXISTS {cls.TABLE_NAME}(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL UNIQUE
+                name TEXT NOT NULL UNIQUE,
+                location VARCHAR NOT NULL,
+                rent INTEGER NOT NULL,
+                image VARCHAR NOT NULL,
+                description TEXT NOT NULL,
+                housing_unit_type_id INTEGER NOT NULL REFERENCES housing_unit_type_id(id),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP    
             )
         """
         cursor.execute(sql)
         conn.commit()
-        print(f"housing_unit_type created")
+        print("PropertyList table created successfully")
         
-Housing_unit_type.create_table()
-housing_unit_types = ["one-bedroom", "two-bedroom", "3-bedroom", "bungallow", "studio", "OTHER"]
-
-for name in housing_unit_types:
-    housing_unit_type = Housing_unit_type(name)
-    housing_unit_type.save()
-    
-
+Property_list.create_table()
