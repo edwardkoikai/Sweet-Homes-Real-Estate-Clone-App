@@ -1,3 +1,4 @@
+
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -7,9 +8,17 @@ import Col from "react-bootstrap/Col";
 import Navbar from "react-bootstrap/Navbar";
 import Image from "react-bootstrap/Image";
 
-function NavBar() {
+function NavBar({ searchTerm, setSearchTerm }) {
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log("i was clicked")
+    console.log(searchTerm)
+
+  };
 
   return (
+
     <Navbar className="bg-body-tertiary sticky-top">
       <Container fluid>
         <Navbar.Brand href="#">
@@ -36,14 +45,17 @@ function NavBar() {
             <Nav.Link as={NavLink} to="/add-property" style={{ marginRight: '2rem' }}>Add Property</Nav.Link>
             <Nav.Link as={NavLink} to="/reservations">View Reservation</Nav.Link>
           </Nav>
-          <Form className="d-flex">
+
+          <Form className="d-flex" onSubmit={handleSearch}>
             <Form.Control
               type="search"
               placeholder="Search"
               className="me-2"
               aria-label="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Button variant="outline-success">Search</Button>
+            <Button variant="outline-success" type="submit">Search</Button>
           </Form>
         </Navbar.Collapse>
       </Container>

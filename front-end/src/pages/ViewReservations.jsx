@@ -1,9 +1,13 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 
-function ViewReservations() {
+function Reserve() {
   return (
-    <div>ViewReservations</div>
+    <Button>
+      
+    </Button>
+    
   )
 }
 
-export default ViewReservations
+export default Reserve

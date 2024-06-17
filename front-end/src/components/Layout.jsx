@@ -1,19 +1,19 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import NavBar from './Navbar'
-import { Container } from 'react-bootstrap'
+import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import NavBar from './Navbar';
 
 function Layout() {
-    return (
-        <>
+  const [searchTerm, setSearchTerm] = useState('');
 
-            <NavBar />
-            <Container>
-                <Outlet />
-            </Container>
-
-        </>
-    )
+  return (
+    <>
+      <NavBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Container>
+        <Outlet context={[searchTerm, setSearchTerm]} />
+      </Container>
+    </>
+  );
 }
 
-export default Layout
+export default Layout;
