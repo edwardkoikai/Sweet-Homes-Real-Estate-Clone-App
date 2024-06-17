@@ -1,19 +1,23 @@
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+function PropertyCard(props) {
 
-function PropertyCard() {
+  const { name, location, rent, image, description } = props
   return (
-    <Card style={{ width: '14rem'}}>
-      <Card.Img variant="top" src=""  />
-      {/* https://images.pexels.com/photos/1571470/pexels-photo-1571470.jpeg?auto=compress&cs=tinysrgb&w=600 */}
+    <Card style={{ width: '14rem' }} className="h-100">
+      <Card.Img variant="top" src={image} style={{ height: '200px', objectFit: 'cover' }} />
       <Card.Body>
-        <Card.Title>Card Title</Card.Title>
+        <Card.Title>{name}</Card.Title>
         <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+        {/* <FontAwesomeIcon icon={faLocationDot} /> */}
+          {location}
         </Card.Text>
-        <Button>view</Button>
+        <Card.Text>
+          {rent}
+        </Card.Text>
+        <Button className="me-4">View</Button>
         <Button>Reserve</Button>
       </Card.Body>
     </Card>

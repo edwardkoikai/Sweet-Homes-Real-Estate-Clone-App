@@ -4,7 +4,7 @@ import PropertyList from "../components/PropertyList";
 function Home() {
   return (
     <>
-      <Container fluid>
+      <Container >
         <PropertyList />
       </Container>
     </>

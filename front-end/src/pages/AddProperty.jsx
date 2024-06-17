@@ -1,11 +1,11 @@
 import { Container } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useForm, Controller, useFieldArray } from "react-hook-form"
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, Controller } from "react-hook-form";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import { BASE_URL } from './utilis';
+import { BASE_URL } from '../utilis';
 
 const schema = z.object({
   name: z.string({
@@ -13,7 +13,7 @@ const schema = z.object({
   }).min(1, { message: 'Name is required' }),
   image: z.string({
     required_error: 'Image is required',
-  }).min(1, { message: 'Name is required' }).url({ message: "Invalid url" }),
+  }).min(1, { message: 'Image is required' }).url({ message: "Invalid url" }),
   description: z.string({
     required_error: 'Description is required',
   }).min(1, { message: 'Description is required' }),
@@ -23,45 +23,61 @@ const schema = z.object({
   rent: z.string({
     required_error: 'Rent/price is required',
   }).min(1, { message: 'Price is required' }),
-  housing_unit_type: z.string({
+  housing_unit_type_id: z.string({
     required_error: 'Housing Type is required',
-  }),
-})
+  }).min(1, { message: 'Housing Type is required' }),
+});
 
 function AddProperty() {
-  const [housing_unit_types, setTypes] = useState([])
+  const [housing_unit_types, setTypes] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     fetch(`${BASE_URL}/housing_unit_types`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
-
     })
-    .then((res)=> res.json())
-    .then((data)=>{
-      console.log(data)
-    }).catch((err)=>console.log(err));
+      .then((res) => res.json())
+      .then((data) => {
+        setTypes(data);
+      }).catch((err) => console.log(err));
   }, []);
 
   const { handleSubmit, control, formState } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       name: '',
-      image: '',
-      description: '',
       location: '',
       rent: '',
-      housing_unit_type: ''
+      image: '',
+      description: '',
+      housing_unit_type_id: ''
     }
-  })
+  });
 
-  console.log(formState.errors)
-  formState.isSubmitting
-  const onSubmit = (values) => {
-    console.log(values)
-  }
+  console.log(formState.errors);
+
+  const onSubmit = async (values) => {
+    try {
+      await fetch(`${BASE_URL}/property_list`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...values,
+          rent: Number(values.rent),
+          housing_unit_type_id: Number(values.housing_unit_type_id)
+        }),
+      }).then((res) => res.json())
+        .then(data => console.log(data))
+        .catch((err) => console.log(err));
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+
   return (
     <Container>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -69,105 +85,105 @@ function AddProperty() {
           name="name"
           control={control}
           render={({ field, fieldState }) => (
-            <Form.Group className="mb-3" controlId="name">
+            <Form.Group className="mb-3">
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" name="name" placeholder="Enter Name" {...field} />
-
+              <Form.Control type="text" placeholder="Enter Name" {...field} />
               {fieldState.invalid && (
                 <Form.Text className="text-danger">
                   {fieldState.error.message}
                 </Form.Text>
               )}
-
-            </Form.Group>)}
+            </Form.Group>
+          )}
         />
         <Controller
           name="location"
           control={control}
           render={({ field, fieldState }) => (
-            <Form.Group className="mb-3" controlId="name">
+            <Form.Group className="mb-3">
               <Form.Label>Location</Form.Label>
-              <Form.Control type="text" name="location" placeholder="Location" {...field} />
-
+              <Form.Control type="text" placeholder="Location" {...field} />
               {fieldState.invalid && (
                 <Form.Text className="text-danger">
                   {fieldState.error.message}
                 </Form.Text>
               )}
-
-            </Form.Group>)}
+            </Form.Group>
+          )}
         />
         <Controller
           name="rent"
           control={control}
           render={({ field, fieldState }) => (
-            <Form.Group className="mb-3" controlId="name">
+            <Form.Group className="mb-3">
               <Form.Label>Rent/Price</Form.Label>
-              <Form.Control type="number" name="rent" placeholder="Enter rent" {...field} />
-
+              <Form.Control type="number" placeholder="Enter rent" {...field} />
               {fieldState.invalid && (
                 <Form.Text className="text-danger">
                   {fieldState.error.message}
                 </Form.Text>
               )}
-
-            </Form.Group>)}
+            </Form.Group>
+          )}
         />
         <Controller
           name="image"
           control={control}
           render={({ field, fieldState }) => (
-            <Form.Group className="mb-3" controlId="name">
+            <Form.Group className="mb-3">
               <Form.Label>Image</Form.Label>
-              <Form.Control type="url" name="image" placeholder="Image" {...field} />
-
+              <Form.Control type="url" placeholder="Image URL" {...field} />
               {fieldState.invalid && (
                 <Form.Text className="text-danger">
                   {fieldState.error.message}
                 </Form.Text>
               )}
-
-            </Form.Group>)}
+            </Form.Group>
+          )}
         />
         <Controller
           name="housing_unit_type_id"
           control={control}
           render={({ field, fieldState }) => (
-            <Form.Group className="mb-3" controlId="name">
+            <Form.Group className="mb-3">
               <Form.Label>Housing Unit Type</Form.Label>
               <Form.Select aria-label="Default select example" {...field}>
                 <option>Select Housing Unit Type</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {housing_unit_types.map((housing_unit_type) => (
+                  <option key={housing_unit_type.id} value={housing_unit_type.id}>
+                    {housing_unit_type.name}
+                  </option>
+                ))}
               </Form.Select>
-
               {fieldState.invalid && (
                 <Form.Text className="text-danger">
                   {fieldState.error.message}
                 </Form.Text>
               )}
-
-            </Form.Group>)}
+            </Form.Group>
+          )}
         />
         <Controller
           name="description"
           control={control}
           render={({ field, fieldState }) => (
-            <Form.Group className="mb-3" controlId="name">
+            <Form.Group className="mb-3">
               <Form.Label>Description</Form.Label>
-              <Form.Control as="textarea" name="description" placeholder="Description" {...field} />
-
+              <Form.Control as="textarea" placeholder="Description" {...field} />
               {fieldState.invalid && (
                 <Form.Text className="text-danger">
                   {fieldState.error.message}
                 </Form.Text>
               )}
-
-            </Form.Group>)}
+            </Form.Group>
+          )}
         />
-        <Button variant="primary" type="submit">
-          Submit
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={formState.isSubmitting}
+        >
+          {formState.isSubmitting ? "Saving..." : "Submit"}
         </Button>
       </Form>
     </Container>
