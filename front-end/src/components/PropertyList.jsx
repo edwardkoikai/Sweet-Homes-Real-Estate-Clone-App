@@ -4,6 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import { Container } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { BASE_URL } from '../utilis'
+// import ViewButton   from './ViewButton';
 
 
 
@@ -29,7 +30,7 @@ function PropertyList() {
           </Col>
         ))}
       </Row>
-
+      {/* <ViewButton /> */}
     </Container>
 
   );

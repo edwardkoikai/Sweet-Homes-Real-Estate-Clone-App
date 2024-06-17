@@ -8,6 +8,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Image from "react-bootstrap/Image";
 
 function NavBar() {
+
   return (
     <Navbar className="bg-body-tertiary sticky-top">
       <Container fluid>
